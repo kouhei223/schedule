@@ -71,7 +71,7 @@ export const DualSpreadsheetView: React.FC<DualSpreadsheetViewProps> = ({
                 </th>
               </tr>
 
-              {/* Column Detail Header (Row 2): 半透明を完全廃止し、スクロール時に裏の文字が透けないように不透明色を指定 */}
+              {/* Column Detail Header (Row 2): 外現場・PARTYより少し薄い不透明色を指定（半透明は完全廃止し、スクロール時の文字透けを防止） */}
               <tr className="border-b-2 border-slate-300 font-semibold select-none text-[11px] bg-white">
                 {/* Calendar Cols: スクロール時固定 (sticky left) */}
                 <th className="sticky left-0 z-30 py-1.5 px-1 text-center border-r border-slate-200 bg-slate-100 text-slate-700 whitespace-nowrap min-w-[54px] w-[54px]">
@@ -81,46 +81,46 @@ export const DualSpreadsheetView: React.FC<DualSpreadsheetViewProps> = ({
                   曜日
                 </th>
 
-                {/* 現場1: 不透明なamber-100で統一してスクロール時の透けを防止 */}
-                <th className="py-1.5 px-2 text-center min-w-[140px] border-r border-slate-200 bg-amber-100 text-amber-950 whitespace-nowrap">
+                {/* 現場1: 外現場(amber-100)より少し薄い不透明色(amber-50) */}
+                <th className="py-1.5 px-2 text-center min-w-[140px] border-r border-slate-200 bg-amber-50 text-amber-950 whitespace-nowrap">
                   現場名
                 </th>
-                <th className="py-1.5 px-1 w-11 text-center border-r border-slate-200 bg-amber-100 text-amber-950 font-bold whitespace-nowrap" title="全員チェック">
+                <th className="py-1.5 px-1 w-11 text-center border-r border-slate-200 bg-amber-50 text-amber-950 font-bold whitespace-nowrap" title="全員チェック">
                   全員
                 </th>
                 {staffNames.map((name, i) => (
                   <th
                     key={`out-th-${name}-${i}`}
-                    className="py-1.5 px-1 min-w-[50px] text-center border-r border-slate-200 bg-amber-100 text-amber-950 truncate whitespace-nowrap"
+                    className="py-1.5 px-1 min-w-[50px] text-center border-r border-slate-200 bg-amber-50 text-amber-950 truncate whitespace-nowrap"
                     title={name}
                   >
                     {name}
                   </th>
                 ))}
-                <th className="py-1.5 px-1 text-center border-r border-slate-200 bg-amber-100 text-amber-950 whitespace-nowrap min-w-[105px]">
+                <th className="py-1.5 px-1 text-center border-r border-slate-200 bg-amber-50 text-amber-950 whitespace-nowrap min-w-[105px]">
                   出勤時間
                 </th>
-                <th className="py-1.5 px-2 text-center min-w-[130px] border-r-2 border-slate-400 bg-amber-100 text-amber-950 whitespace-nowrap">
+                <th className="py-1.5 px-2 text-center min-w-[130px] border-r-2 border-slate-400 bg-amber-50 text-amber-950 whitespace-nowrap">
                   備考
                 </th>
 
-                {/* 現場2 (PARTY): 不透明なemerald-100で統一してスクロール時の透けを防止、幅は68px */}
-                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-100 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
+                {/* 現場2 (PARTY): PARTY(emerald-100)より少し薄い不透明色(emerald-50)、幅は68px */}
+                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-50 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
                   PA
                 </th>
-                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-100 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
+                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-50 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
                   照明
                 </th>
-                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-100 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
+                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-50 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
                   受付
                 </th>
-                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-100 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
+                <th className="py-1.5 px-0.5 text-center border-r border-slate-200 bg-emerald-50 text-emerald-950 font-bold whitespace-nowrap min-w-[68px] w-[68px]">
                   ドリンク
                 </th>
-                <th className="py-1.5 px-1 w-16 text-center border-r border-slate-200 bg-pink-100 text-pink-900 font-bold whitespace-nowrap" title="SALA出演">
+                <th className="py-1.5 px-1 w-16 text-center border-r border-slate-200 bg-pink-50 text-pink-900 font-bold whitespace-nowrap" title="SALA出演">
                   SALA出演
                 </th>
-                <th className="py-1.5 px-2 text-center min-w-[140px] bg-emerald-100 text-emerald-950 whitespace-nowrap">
+                <th className="py-1.5 px-2 text-center min-w-[140px] bg-emerald-50 text-emerald-950 whitespace-nowrap">
                   備考
                 </th>
               </tr>
