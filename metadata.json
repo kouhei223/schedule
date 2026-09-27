@@ -1,0 +1,6 @@
+{
+  "name": "月間現場予定表スプレッドシート",
+  "description": "月を入力すると自動で土曜（青）・日曜祝日（赤）が条件付き色付けされるカレンダーを構築。現場名・必要人数・時間などを管理し、スプレッドシート出力や数式ガイドに対応。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
