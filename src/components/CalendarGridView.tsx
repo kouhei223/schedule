@@ -15,49 +15,52 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
   month,
   staffNames,
 }) => {
+  // 月曜始まり
   const weekdayHeaders = [
-    { label: '日', isSunday: true, isSaturday: false },
     { label: '月', isSunday: false, isSaturday: false },
     { label: '火', isSunday: false, isSaturday: false },
     { label: '水', isSunday: false, isSaturday: false },
     { label: '木', isSunday: false, isSaturday: false },
     { label: '金', isSunday: false, isSaturday: false },
     { label: '土', isSunday: false, isSaturday: true },
+    { label: '日', isSunday: true, isSaturday: false },
   ];
 
-  const firstDayOfWeek = days.length > 0 ? days[0].dayOfWeekIndex : 0;
-  const leadingBlanks = Array.from({ length: firstDayOfWeek });
+  // 日曜始まり(0..6)を月曜始まり(0:月..6:日)に換算してブランク数を算出
+  const firstDaySundayBased = days.length > 0 ? days[0].dayOfWeekIndex : 0;
+  const leadingBlanksCount = (firstDaySundayBased + 6) % 7;
+  const leadingBlanks = Array.from({ length: leadingBlanksCount });
+
+  // 最終日（30日・31日）以降の末尾ブランクを算出し、完全な7列グリッドを形成
+  const totalCells = leadingBlanksCount + days.length;
+  const trailingBlanksCount = (7 - (totalCells % 7)) % 7;
+  const trailingBlanks = Array.from({ length: trailingBlanksCount });
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
-      {/* Month Title */}
-      <div className="p-4 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
-        <div>
-          <h2 className="text-base font-bold text-slate-900">
-            {year}年 {month}月 2現場カレンダー
-          </h2>
-          <p className="text-xs text-slate-500">
-            各日の「外現場」とライブハウス「PARTY」の稼働を並べて確認できます（土曜：青 / 日祝：赤）
-          </p>
-        </div>
+      {/* Month Title: 2現場カレンダー → カレンダーに変更、説明文は削除 */}
+      <div className="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-base font-bold text-slate-900">
+          {year}年 {month}月 カレンダー
+        </h2>
         <div className="flex items-center gap-3 text-xs">
           <span className="flex items-center gap-1 font-semibold text-amber-800">
-            <span className="w-2.5 h-2.5 rounded bg-amber-400 inline-block"></span>
+            <span className="px-1 py-0.2 rounded bg-amber-200 text-amber-950 font-black text-[9px]">外</span>
             外現場
           </span>
-          <span className="flex items-center gap-1 font-semibold text-indigo-800">
-            <span className="w-2.5 h-2.5 rounded bg-indigo-500 inline-block"></span>
+          <span className="flex items-center gap-1 font-semibold text-emerald-800">
+            <span className="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 font-black text-[9px]">P</span>
             PARTY
           </span>
         </div>
       </div>
 
-      {/* Weekday Headers */}
+      {/* Weekday Headers (月曜始まり) */}
       <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center text-xs font-bold">
         {weekdayHeaders.map((w, idx) => (
           <div
             key={idx}
-            className={`py-2.5 border-r border-slate-200 last:border-r-0 ${
+            className={`py-2 border-r border-slate-200 last:border-r-0 ${
               w.isSunday
                 ? 'text-red-700 bg-red-50/60'
                 : w.isSaturday
@@ -65,15 +68,15 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                 : 'text-slate-700'
             }`}
           >
-            {w.label}曜日
+            {w.label}
           </div>
         ))}
       </div>
 
-      {/* Days Grid */}
-      <div className="grid grid-cols-7 divide-x divide-y divide-slate-200">
+      {/* Days Grid: 30日・31日など末尾まで途切れず完全なグリッド線を表示 */}
+      <div className="grid grid-cols-7 border-l border-slate-200">
         {leadingBlanks.map((_, i) => (
-          <div key={`blank-${i}`} className="bg-slate-50/50 min-h-[140px] p-2" />
+          <div key={`blank-lead-${i}`} className="bg-slate-50/50 min-h-[130px] p-1.5 border-r border-b border-slate-200" />
         ))}
 
         {days.map((day) => {
@@ -110,51 +113,46 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
             ? '全員'
             : staffNames.filter((s) => day.outside.staffCheck.staff[s]).join('、');
 
-          // Checked staff names for party (「全員」は削除)
+          // Checked staff names for party
           const partyChecked = staffNames.filter((s) => day.party.staffCheck[s]).join('、');
 
           return (
             <div
               key={day.dateStr}
-              className={`min-h-[150px] p-2 flex flex-col justify-between transition relative text-xs ${dayBg}`}
+              className={`min-h-[140px] p-1.5 flex flex-col justify-between transition relative text-xs border-r border-b border-slate-200 ${dayBg}`}
             >
               {/* Day Number Header */}
               <div>
-                <div className={`flex items-center justify-between -mx-2 -mt-2 p-1.5 px-2 border-b border-slate-100 ${headerBg}`}>
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`text-sm ${dateTextColor}`}>
+                <div className={`flex items-center justify-between -mx-1.5 -mt-1.5 p-1 px-1.5 border-b border-slate-100 ${headerBg}`}>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <span className={`text-xs sm:text-sm ${dateTextColor}`}>
                       {day.dayNumber}
                     </span>
                     {isHol && (
-                      <span className="text-[10px] px-1 py-0.2 rounded bg-red-100 text-red-700 font-medium truncate max-w-[80px]" title={day.holidayName}>
+                      <span className="text-[9px] px-1 py-0.2 rounded bg-red-100 text-red-700 font-medium truncate max-w-[65px]" title={day.holidayName}>
                         {day.holidayName}
                       </span>
                     )}
                   </div>
-                  {hasOutside && hasParty && (
-                    <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-purple-100 text-purple-800 font-bold">
-                      2現場重
-                    </span>
-                  )}
                 </div>
 
-                {/* Outside Site Card */}
-                <div className="mt-1.5 space-y-1">
+                {/* Outside Site Card: [外] 略称表示 */}
+                <div className="mt-1 space-y-1">
                   {hasOutside && (
-                    <div className="p-1.5 rounded-lg bg-amber-50/90 border border-amber-200 text-[11px] shadow-2xs">
-                      <div className="flex items-center justify-between font-bold text-amber-950">
+                    <div className="p-1 rounded bg-amber-50/90 border border-amber-200 text-[11px] shadow-2xs">
+                      <div className="flex items-center justify-between font-bold text-amber-950 gap-0.5">
                         <span className="truncate flex items-center gap-1" title={day.outside.siteName}>
-                          <Building2 className="w-3 h-3 text-amber-700 shrink-0" />
+                          <span className="px-1 py-0.2 rounded bg-amber-200 text-amber-950 font-black text-[9px] shrink-0">外</span>
                           <span className="truncate">{day.outside.siteName}</span>
                         </span>
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-0.5 shrink-0">
                           {day.outside.isMorning && (
-                            <span className="text-[9px] px-1 py-0.2 rounded bg-amber-200 text-amber-900 font-semibold">
-                              朝
+                            <span className="text-[8px] px-1 py-0.2 rounded bg-amber-200 text-amber-900 font-semibold">
+                              午前
                             </span>
                           )}
                           {day.outside.isAfternoon && (
-                            <span className="text-[9px] px-1 py-0.2 rounded bg-orange-200 text-orange-950 font-semibold">
+                            <span className="text-[8px] px-1 py-0.2 rounded bg-orange-200 text-orange-950 font-semibold">
                               午後
                             </span>
                           )}
@@ -168,19 +166,20 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                     </div>
                   )}
 
-                  {/* PARTY Card */}
+                  {/* PARTY Card: [P] 略称表示、緑系（エメラルド）配色 */}
                   {hasParty && (
-                    <div className="p-1.5 rounded-lg bg-indigo-50/90 border border-indigo-200 text-[11px] shadow-2xs">
-                      <div className="flex items-center justify-between font-bold text-indigo-950">
+                    <div className="p-1 rounded bg-emerald-50/90 border border-emerald-200 text-[11px] shadow-2xs">
+                      <div className="flex items-center justify-between font-bold text-emerald-950 gap-0.5">
                         <span className="truncate flex items-center gap-1">
-                          <Music2 className="w-3 h-3 text-indigo-600 shrink-0" />
-                          <span>PARTY</span>
-                          {day.party.paStaff && (
-                            <span className="font-normal text-indigo-800"> (PA:{day.party.paStaff})</span>
+                          <span className="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 font-black text-[9px] shrink-0">P</span>
+                          {day.party.paStaff ? (
+                            <span className="truncate text-emerald-900 text-[10px]">PA:{day.party.paStaff}</span>
+                          ) : (
+                            <span className="truncate text-emerald-900 text-[10px]">PARTY</span>
                           )}
                         </span>
                         {day.party.isSalaPerformance && (
-                          <span className="text-[9px] px-1 py-0.2 rounded bg-pink-100 text-pink-700 font-bold border border-pink-200 shrink-0">
+                          <span className="text-[8px] px-1 py-0.2 rounded bg-pink-100 text-pink-700 font-bold border border-pink-200 shrink-0">
                             SALA
                           </span>
                         )}
@@ -190,17 +189,17 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                           {[
                             day.party.lightingStaff && `照:${day.party.lightingStaff}`,
                             day.party.receptionStaff && `受:${day.party.receptionStaff}`,
-                            day.party.drinkStaff && `D:${day.party.drinkStaff}`,
+                            day.party.drinkStaff && `ド:${day.party.drinkStaff}`,
                           ].filter(Boolean).join(' | ')}
                         </div>
                       )}
                       {day.party.notes && (
-                        <div className="text-[10px] text-indigo-900 mt-0.5 truncate">
+                        <div className="text-[10px] text-emerald-900 mt-0.5 truncate">
                           {day.party.notes}
                         </div>
                       )}
                       {partyChecked && (
-                        <div className="text-[10px] text-indigo-700 truncate font-medium">
+                        <div className="text-[10px] text-emerald-700 truncate font-medium">
                           👥 {partyChecked}
                         </div>
                       )}
@@ -208,7 +207,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                   )}
 
                   {!hasOutside && !hasParty && (
-                    <div className="text-center py-2 text-slate-300 text-[11px]">
+                    <div className="text-center py-1.5 text-slate-300 text-[11px]">
                       -
                     </div>
                   )}
@@ -217,6 +216,11 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
             </div>
           );
         })}
+
+        {/* 最終週の不足マスを埋めて完全なグリッドにする */}
+        {trailingBlanks.map((_, i) => (
+          <div key={`blank-trail-${i}`} className="bg-slate-50/50 min-h-[130px] p-1.5 border-r border-b border-slate-200" />
+        ))}
       </div>
     </div>
   );

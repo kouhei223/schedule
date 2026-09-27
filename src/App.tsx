@@ -495,33 +495,12 @@ export default function App() {
         onOpenStaffModal={() => setIsStaffModalOpen(true)}
         onPrint={handlePrint}
         copyFeedback={copyFeedback}
+        onLoadAudioSampleData={handleLoadAudioSampleData}
+        onClearMonth={handleClearMonth}
       />
 
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-        {/* Subtle quick tips bar for users */}
-        <div className="bg-white/90 border border-slate-200 rounded-xl p-2.5 mb-3 flex flex-wrap items-center justify-between gap-2 text-xs shadow-2xs print:hidden">
-          <div className="flex items-center gap-2 text-slate-700">
-            <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-              A1セル連動: {month}月 ({year}年)
-            </span>
-            <span className="text-slate-600">
-              土曜（青）・日曜祝日（赤）自動着色 | 【外現場】と【PARTY（前段日付付き・PA/照明/受付/ドリンク/SALA）】の2現場同時管理
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsGuideOpen(true)}
-              className="text-amber-800 hover:text-amber-900 font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer"
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-amber-600" />
-              <span>A1自動連動数式・内閣府祝日API設定を見る</span>
-              <ArrowRight className="w-3 h-3 text-amber-600" />
-            </button>
-          </div>
-        </div>
-
+      {/* Main Content - Maximized for mobile */}
+      <main className="flex-1 w-full px-0.5 sm:px-3 py-1">
         {/* Dynamic Views */}
         {viewMode === 'dual-spreadsheet' && (
           <DualSpreadsheetView

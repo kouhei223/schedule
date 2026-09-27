@@ -23,7 +23,12 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
 
     days.forEach((d) => {
       const isOutsideChecked = d.outside.staffCheck.all || Boolean(d.outside.staffCheck.staff[name]);
-      const isPartyChecked = Boolean(d.party.staffCheck[name]);
+      const isPartyAssigned = 
+        d.party.paStaff === name || 
+        d.party.lightingStaff === name || 
+        d.party.receptionStaff === name || 
+        d.party.drinkStaff === name ||
+        Boolean(d.party.staffCheck[name]);
 
       const hasOutsideSite = Boolean(d.outside.siteName);
       const hasPartySite = Boolean(
@@ -36,7 +41,7 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
       );
 
       const workedOutside = hasOutsideSite && isOutsideChecked;
-      const workedParty = hasPartySite && isPartyChecked;
+      const workedParty = hasPartySite && isPartyAssigned;
 
       if (workedOutside) outsideDays++;
       if (workedParty) partyDays++;
@@ -85,31 +90,28 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
             <span className="text-2xl font-bold text-slate-900">{totalOutsideDays}</span>
             <span className="text-xs text-slate-500">日 / 今月</span>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1">ホール・野外・出向音響現場の合計</p>
         </div>
 
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between text-indigo-800 mb-2">
+          <div className="flex items-center justify-between text-emerald-800 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">PARTY 稼働日数</span>
-            <Music2 className="w-5 h-5 text-indigo-600" />
+            <Music2 className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold text-slate-900">{totalPartyDays}</span>
             <span className="text-xs text-slate-500">日 / 今月</span>
           </div>
-          <p className="text-[11px] text-slate-500 mt-1">ライブハウス「PARTY」のイベント・通常営業</p>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-purple-200 bg-purple-50/40 shadow-2xs">
-          <div className="flex items-center justify-between text-purple-900 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">2現場同時稼働日 (多忙日)</span>
-            <Disc className="w-5 h-5 text-purple-600" />
+        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center justify-between text-slate-800 mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider">2現場以上同時稼働日（多忙日）</span>
+            <Disc className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-purple-900">{totalBothDays}</span>
-            <span className="text-xs text-purple-700">日間</span>
+            <span className="text-2xl font-bold text-slate-900">{totalBothDays}</span>
+            <span className="text-xs text-slate-500">日間</span>
           </div>
-          <p className="text-[11px] text-purple-800 mt-1">外現場とPARTYが重なる日（スタッフ調整が重要）</p>
         </div>
       </div>
 
@@ -131,8 +133,8 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
               <tr>
                 <th className="py-2.5 px-4">スタッフ名</th>
                 <th className="py-2.5 px-4 text-center bg-amber-50/50 text-amber-900">外現場 出勤</th>
-                <th className="py-2.5 px-4 text-center bg-indigo-50/50 text-indigo-900">PARTY 出勤</th>
-                <th className="py-2.5 px-4 text-center bg-purple-50/50 text-purple-900">同日2現場</th>
+                <th className="py-2.5 px-4 text-center bg-emerald-50/50 text-emerald-900">PARTY 出勤</th>
+                <th className="py-2.5 px-4 text-center bg-slate-100 text-slate-800">同日2現場</th>
                 <th className="py-2.5 px-4 text-center font-bold">実稼働日数 (合計)</th>
                 <th className="py-2.5 px-4">稼働バランス</th>
               </tr>
@@ -146,10 +148,10 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
                   <td className="py-3 px-4 text-center font-semibold text-amber-800 bg-amber-50/20">
                     {s.outsideDays} 日
                   </td>
-                  <td className="py-3 px-4 text-center font-semibold text-indigo-800 bg-indigo-50/20">
+                  <td className="py-3 px-4 text-center font-semibold text-emerald-800 bg-emerald-50/20">
                     {s.partyDays} 日
                   </td>
-                  <td className="py-3 px-4 text-center text-purple-700 font-semibold bg-purple-50/20">
+                  <td className="py-3 px-4 text-center text-slate-700 font-semibold bg-slate-50">
                     {s.dualSiteDays} 日
                   </td>
                   <td className="py-3 px-4 text-center font-bold text-slate-900 text-sm">
@@ -164,7 +166,7 @@ export const StaffSummary: React.FC<StaffSummaryProps> = ({
                           title={`外現場: ${s.outsideDays}日`}
                         />
                         <div
-                          className="bg-indigo-500 h-full"
+                          className="bg-emerald-500 h-full"
                           style={{ width: `${s.totalWorkDays > 0 ? (s.partyDays / (s.outsideDays + s.partyDays || 1)) * 100 : 0}%` }}
                           title={`PARTY: ${s.partyDays}日`}
                         />

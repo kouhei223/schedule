@@ -294,13 +294,13 @@ function fetchJapanHolidays() {
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                 <span className="font-bold text-amber-950 block mb-1">【外現場】の列構成</span>
                 <span className="text-slate-700 leading-normal">
-                  外現場名 / 全員チェック / スタッフ5名チェック / 朝から・午後から / 備考
+                  現場名 / 全員チェック / スタッフ5名チェック / 出勤時間（午前・午後） / 備考
                 </span>
               </div>
-              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
-                <span className="font-bold text-indigo-950 block mb-1">【PARTY】の列構成</span>
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                <span className="font-bold text-emerald-950 block mb-1">【PARTY】の列構成</span>
                 <span className="text-slate-700 leading-normal">
-                  前段の日付・曜日 / PA (プルダウン) / 照明 (プルダウン) / 受付 (プルダウン) / ドリンク (プルダウン) / SALA出演チェック / イベント・備考
+                  PA (プルダウン) / 照明 (プルダウン) / 受付 (プルダウン) / ドリンク (プルダウン) / SALA出演チェック / 備考
                 </span>
               </div>
             </div>
